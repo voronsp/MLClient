@@ -1,4 +1,4 @@
-package ru.airpaw;
+package ru.airpaw.stepDefs;
 
 import cucumber.api.java.After;
 import cucumber.api.java.Before;

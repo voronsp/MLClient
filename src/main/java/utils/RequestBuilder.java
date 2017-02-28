@@ -46,8 +46,11 @@ public class RequestBuilder {
             throw new RuntimeException("Request failed: HTTP error code: "
                     + conn.getResponseCode());
         }
+        BufferedReader br = new BufferedReader(new InputStreamReader(
+                conn.getInputStream()));
+
+        response = new JSONObject(br.readLine());
         
-        response = new JSONObject(conn.getResponseMessage());
         conn.disconnect();
         return response;
     }

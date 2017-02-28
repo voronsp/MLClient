@@ -8,7 +8,6 @@ import java.awt.event.InputEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import ru.airpaw.AppTest;
 import utils.ImageBin;
 import utils.RawScreenshot;
 import utils.RequestBuilder;
@@ -21,10 +20,11 @@ import org.json.JSONObject;
  */
 public class StepDefinitions { 
     @Дано("^открывается страница с url \"(.*?)\"$")
-    public void open_page(String pageLocalUrl) {
-        File pageLocal =  new File (pageLocalUrl);
-        AppTest.driver.get(pageLocal.getAbsolutePath());
+    public void open_page(String pageLocalUrl) throws InterruptedException {
+//        File pageLocal =  new File (pageLocalUrl);
+        AppTest.driver.get("https://yandex.ru");
         AppTest.driver.manage().window().maximize();
+        Thread.sleep(2000);
     }
     
     @И("^пользователь нажимает кнопку \"(.*?)\"$")
@@ -35,11 +35,12 @@ public class StepDefinitions {
         RequestBuilder req = new RequestBuilder();
         RawScreenshot screen = new RawScreenshot(curImage.adaptiveThresholdingChristian(img, 50, 50));
         JSONObject response = req.sendRequest(screen,"button",buttonName);
-        int xCoord = Integer.parseInt(response.getString("x"));
-        int yCoord = Integer.parseInt(response.getString("y"));
+        int xCoord = (Integer)response.getJSONObject("point").get("x");
+        int yCoord = (Integer)response.getJSONObject("point").get("y");
+        AppTest.robot.setAutoDelay(500);
         AppTest.robot.mouseMove(xCoord, yCoord);
         AppTest.robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
         AppTest.robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
-        Thread.sleep(500);
+        Thread.sleep(5000);
     }
 }
