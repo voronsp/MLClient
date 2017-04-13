@@ -22,15 +22,16 @@ public class ImageBin {
         this.curImg = im;
     }
 
-    public BufferedImage getGrayScale() {
+    public BufferedImage getGrayScale() throws IOException {
         BufferedImage img = new BufferedImage(curImg.getWidth(), curImg.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
         Graphics g = img.getGraphics();
         g.drawImage(curImg, 0, 0, null);
         g.dispose();
+//        ImageIO.write(img, "jpg", new File("images/imgGray!!!.jpg"));
         return img;
     }
 
-    public BufferedImage getThersholdedGrayscale(BufferedImage source, int thresh, boolean inverted) {
+    public BufferedImage getThersholdedGrayscale(BufferedImage source, int thresh, boolean inverted) throws IOException {
         int setPix;
         for (int i = 0; i < source.getWidth(); i++) {
             for (int j = 0; j < source.getHeight(); j++) {
@@ -43,6 +44,7 @@ public class ImageBin {
                 source.setRGB(i, j, setPix);
             }
         }
+//        ImageIO.write(source, "jpg", new File("images/imgGray.jpg"));
         return source;
     }
 
@@ -100,9 +102,9 @@ public class ImageBin {
                 mean = getMean(subIm);                
                 T = (int) (Math.round((1 - k)*mean + k*m + k*s/R*(mean - m)));
                 g.drawImage(getThersholdedGrayscale(subIm, T, true), i, j, null);
-//                ImageIO.write(getThersholdedGrayscale(subIm, T, false), "jpg", new File("images/imgGray_" + i + j + ".jpg"));
             }
-        g.dispose(); 
+        g.dispose();
+        ImageIO.write(res, "jpg", new File("images/imgGrayCh.jpg"));
         return res;
     }
 
